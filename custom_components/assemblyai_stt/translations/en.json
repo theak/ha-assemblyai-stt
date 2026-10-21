@@ -1,0 +1,60 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Transcribes Assist voice requests with AssemblyAI's streaming models while you speak. Get an API key at assemblyai.com.",
+        "data": {
+          "api_key": "API key"
+        }
+      },
+      "reauth_confirm": {
+        "description": "AssemblyAI rejected the saved API key. Enter a new one.",
+        "data": {
+          "api_key": "API key"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "AssemblyAI rejected this API key.",
+      "cannot_connect": "Couldn't reach AssemblyAI. Check the connection and try again."
+    },
+    "abort": {
+      "already_configured": "AssemblyAI is already set up.",
+      "single_instance_allowed": "AssemblyAI is already set up.",
+      "reauth_successful": "The API key was updated."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "model": "Model",
+          "keyterms": "Keyterms (optional)",
+          "fallback_stt": "Fallback speech-to-text (optional)",
+          "finish_on_end_of_turn": "Stop listening when AssemblyAI hears the end of the sentence"
+        },
+        "data_description": {
+          "model": "Universal-3.6 Pro Realtime is the most accurate. Universal-Streaming English costs a third as much.",
+          "keyterms": "Words to recognize more reliably, one per line, up to 100. A small, focused list (your room names and the few device names you say most) usually works better than a long list of everything. Free on Universal-3.6 Pro; $0.04/hour extra on Universal-Streaming English.",
+          "fallback_stt": "Used when AssemblyAI can't be reached, rejects the request (for example because another request is already streaming), or doesn't answer in time. The audio heard so far is passed to this engine, so nothing needs repeating.",
+          "finish_on_end_of_turn": "Off: listen until your voice assistant detects silence, as with other engines. On: return the text as soon as AssemblyAI decides you've finished, which can be quicker but may cut off a request if you pause mid-sentence."
+        }
+      }
+    },
+    "error": {
+      "too_many_keyterms": "Use at most 100 keyterms."
+    }
+  },
+  "services": {
+    "simulate_failure": {
+      "name": "Simulate failure",
+      "description": "Makes the next requests fail before reaching AssemblyAI, to test the fallback engine.",
+      "fields": {
+        "count": {
+          "name": "Count",
+          "description": "How many requests in a row should fail."
+        }
+      }
+    }
+  }
+}

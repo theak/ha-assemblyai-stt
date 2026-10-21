@@ -1,0 +1,18 @@
+{
+  "domain": "assemblyai_stt",
+  "name": "AssemblyAI Speech-to-Text",
+  "codeowners": [
+    "@theak"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "stt"
+  ],
+  "documentation": "https://github.com/theak/ha-assemblyai-stt",
+  "integration_type": "service",
+  "iot_class": "cloud_push",
+  "issue_tracker": "https://github.com/theak/ha-assemblyai-stt/issues",
+  "requirements": [],
+  "single_config_entry": true,
+  "version": "1.0.0"
+}

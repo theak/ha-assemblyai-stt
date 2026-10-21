@@ -1,0 +1,49 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  hassfest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: home-assistant/actions/hassfest@master
+
+  hacs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hacs/action@main
+        with:
+          category: integration
+          # Brand images live in the home-assistant/brands repo; this integration has none.
+          ignore: brands
+
+  # Imports the integration against the newest Home Assistant release, weekly, to catch changes
+  # to the speech-to-text entity API before you upgrade.
+  imports:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - run: pip install homeassistant
+      - name: Import every module and check the speech-to-text API it uses
+        run: |
+          python - <<'PY'
+          import inspect
+          from homeassistant.components import stt
+          import custom_components.assemblyai_stt as integration
+          from custom_components.assemblyai_stt import config_flow, const, stt as entity
+          assert {"async_get_speech_to_text_entity", "SpeechToTextEntity", "SpeechMetadata"} <= set(stt.__all__)
+          assert "internal_async_process_audio_stream" in dir(stt.SpeechToTextEntity)
+          assert "stream" in inspect.signature(stt.SpeechToTextEntity.async_process_audio_stream).parameters
+          assert entity.strip_wav_header(b"RIFF\0\0\0\0WAVEfmt \0\0\0\0data\0\0\0\0\x01\x02") == b"\x01\x02"
+          assert config_flow.parse_keyterms("Living Room\n kitchen, living room\n\n") == ["Living Room", "kitchen"]
+          import homeassistant.const as c; print("OK on Home Assistant", c.__version__)
+          PY

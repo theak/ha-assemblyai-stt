@@ -1,0 +1,9 @@
+simulate_failure:
+  fields:
+    count:
+      default: 1
+      selector:
+        number:
+          min: 0
+          max: 10
+          mode: box
