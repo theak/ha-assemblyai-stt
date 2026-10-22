@@ -19,6 +19,8 @@ your voice, microphones and device names.
 4. **Settings → Voice assistants**, open your assistant and set **Speech-to-text** to
    **AssemblyAI**.
 
+To change the API key later, use **Reconfigure** on the integration.
+
 To install by hand instead, copy `custom_components/assemblyai_stt` into your
 `config/custom_components/` folder and continue from step 2.
 
@@ -37,8 +39,11 @@ Use **Configure** on the integration to change these.
 
 - AssemblyAI bills streaming by how long the connection is open. The integration opens it when
   your voice assistant starts listening and closes it as soon as the text is final.
-- Accounts have a limit on concurrent streaming sessions. If two satellites are used at the same
-  moment, one request may be rejected; with a fallback engine set, it goes to that engine instead.
+- AssemblyAI limits how many streaming sessions an account can start per minute: 5 on a free
+  account, 100 or more once billing is set up
+  ([rate limits](https://www.assemblyai.com/docs/streaming/rate-limits)). Each voice request is
+  one session, so a free account will reject a sixth request within a minute; with a fallback
+  engine set, that request goes to the fallback instead.
 - Only 16-bit mono PCM audio is accepted, which is what Home Assistant's voice pipeline sends.
 
 ## Testing the fallback

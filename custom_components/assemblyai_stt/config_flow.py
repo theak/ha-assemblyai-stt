@@ -93,6 +93,23 @@ class AssemblyAIConfigFlow(ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
+    async def async_step_reconfigure(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        """Change the API key, for example after moving to another AssemblyAI account."""
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            if not (error := await _check_key(self.hass, user_input[CONF_API_KEY].strip())):
+                return self.async_update_reload_and_abort(
+                    self._get_reconfigure_entry(), data_updates={CONF_API_KEY: user_input[CONF_API_KEY].strip()}
+                )
+            errors["base"] = error
+        return self.async_show_form(
+            step_id="reconfigure",
+            data_schema=vol.Schema(
+                {vol.Required(CONF_API_KEY): selector.TextSelector(selector.TextSelectorConfig(type="password"))}
+            ),
+            errors=errors,
+        )
+
     @staticmethod
     @callback
     def async_get_options_flow(config_entry: ConfigEntry) -> AssemblyAIOptionsFlow:

@@ -12,6 +12,12 @@
         "data": {
           "api_key": "API key"
         }
+      },
+      "reconfigure": {
+        "description": "Enter a new AssemblyAI API key, for example from another account.",
+        "data": {
+          "api_key": "API key"
+        }
       }
     },
     "error": {
@@ -21,7 +27,8 @@
     "abort": {
       "already_configured": "AssemblyAI is already set up.",
       "single_instance_allowed": "AssemblyAI is already set up.",
-      "reauth_successful": "The API key was updated."
+      "reauth_successful": "The API key was updated.",
+      "reconfigure_successful": "The API key was updated."
     }
   },
   "options": {
